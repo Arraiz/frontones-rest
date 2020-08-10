@@ -29,11 +29,27 @@ def fronton_get(fronton_index:str):
 
         lat=request.form.get('lat')
         lon=request.form.get('lon')
-        user=request.form.get('user')
-        
-        print("lat:%s lon:%s user: %s"%(lat,lon,user))
-        frontones_controller.check_pick_and_write_fronton_to_json(lat,lon,fronton_index,user)
-        return redirect(url_for('frontones'))
+        status=request.form.get('status')
+        user=request.form.get('user') 
+        print("lat:%s\nlon:%s\nuser:%s\nstatus:%s\n"%(lat,lon,user,status))
+        if status == "1":
+            print("sdfsdfsdf")
+            #capturar
+            operation_result=frontones_controller.check_pick_and_write_fronton_to_json(lat,lon,fronton_index,user)
+            print(operation_result)
+            return jsonify(operation_result)
+
+        elif status == '0':
+            print('freeing')
+            operation_result=frontones_controller.free_fronton_and_write_to_json(fronton_index,user)
+            return jsonify(operation_result)
+ 
+
+
+
+        return jsonify('other')
+
+
     else:
         all_frontones = frontones_controller.get_frontones_from_JSON()
         #wanted = next(f if f.index == fronton_index else 'None' for f in all_frontones)
