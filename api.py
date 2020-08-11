@@ -54,13 +54,14 @@ def fronton_get(fronton_index:str):
         all_frontones = frontones_controller.get_frontones_from_JSON()
         #wanted = next(f if f.index == fronton_index else 'None' for f in all_frontones)
         try:
-            #wanted = next(f if str(f.index) == str(fronton_index) else 'None' for f in all_frontones)
-            # @MD change this to upper line
-            for f in all_frontones:
-                if f.index == fronton_index:
-                    wanted=f
-            print(fronton_index)
+            wanted = next(( f for f in all_frontones if f.index == fronton_index),'No fronton by that index')
             print(wanted)
+            # @MD change this to upper line
+           # for f in all_frontones:
+           #     if f.index == fronton_index:
+           #         wanted=f
+           # print(fronton_index)
+           # print(wanted)
             return jsonify(wanted.as_dict())
         except Exception:
             return jsonify('an error ocurred dude')
