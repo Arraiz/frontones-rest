@@ -13,8 +13,10 @@ app.config["DEBUG"] = True
 #APIs calls
 frontones_controller = FrontonesController()
 
-
-
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return redirect(url_for("frontones"))
 
 @app.route('/frontones/', methods=['GET'])
 def frontones():
@@ -43,29 +45,14 @@ def fronton_get(fronton_index:str):
             print('freeing')
             operation_result=frontones_controller.free_fronton_and_write_to_json(fronton_index,user)
             return jsonify(operation_result)
- 
-
-
-
         return jsonify('other')
-
-
     else:
         all_frontones = frontones_controller.get_frontones_from_JSON()
-        #wanted = next(f if f.index == fronton_index else 'None' for f in all_frontones)
         try:
             wanted = next(( f for f in all_frontones if f.index == fronton_index),'No fronton by that index')
-            print(wanted)
-            # @MD change this to upper line
-           # for f in all_frontones:
-           #     if f.index == fronton_index:
-           #         wanted=f
-           # print(fronton_index)
-           # print(wanted)
             return jsonify(wanted.as_dict())
         except Exception:
             return jsonify('an error ocurred dude')
 
-
-
+            
 app.run(port=8080)
